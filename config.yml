@@ -1,0 +1,4 @@
+bucket_name : 'sandboxstav'
+object_key : 'creditcard.csv.zip'
+role : '20251024T155238'
+mlflow_uri : 'arn:aws:sagemaker:us-east-1:274594569284:mlflow-tracking-server/track-server-ui'

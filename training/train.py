@@ -34,10 +34,10 @@ def get_model(trainx):
 def train_model(model,x,y,epochs):
     
     metrics = [
-    keras.metrics.FalseNegatives(name="fn"),
-    keras.metrics.FalsePositives(name="fp"),
-    keras.metrics.TrueNegatives(name="tn"),
-    keras.metrics.TruePositives(name="tp"),
+    # keras.metrics.FalseNegatives(name="fn"),
+    # keras.metrics.FalsePositives(name="fp"),
+    # keras.metrics.TrueNegatives(name="tn"),
+    # keras.metrics.TruePositives(name="tp"),
     keras.metrics.Precision(name="precision"),
     keras.metrics.Recall(name="recall"),]
 
@@ -70,6 +70,8 @@ if __name__ == '__main__':
     train_dir = os.environ.get("SM_CHANNEL_TRAIN", "/opt/ml/input/data/train")
     parser.add_argument('--model_dir', type=str, default='/opt/ml/model')
     parser.add_argument('--epochs', type=str, default=10)
+    parser.add_argument('--experiment_name', type=str, default='random')
+    parser.add_argument('--run_name', type=str, default='rndom')
     
     args = parser.parse_args()
     x, y = get_data(train_dir)
@@ -83,17 +85,19 @@ if __name__ == '__main__':
     
     # # Enable autologging in MLflow
     mlflow.autolog()
+    mlflow.set_experiment(args.experiment_name)
+    with mlflow.start_run(run_name=args.run_name):
 
-    print("Building model..........")
-    model = get_model(x)
-
-    print(model.summary())
-
-    print("Training model..........")
-
-    trained_model = train_model(model,x,y,int(args.epochs))
-
-    print("Completed training........")
+        print("Building model..........")
+        model = get_model(x)
+    
+        print(model.summary())
+    
+        print("Training model..........")
+    
+        trained_model = train_model(model,x,y,int(args.epochs))
+    
+        print("Completed training........")
     
 
     
